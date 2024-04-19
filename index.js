@@ -22,42 +22,75 @@ function removeAtIndex(arr,id){
   }
   return newarray;
 }
-app.get('/',(req,res)=>{
+app.get('/tasks',(req,res)=>{
   //console.log(todos);
-  res.json(todos);
+  return res.status(200).json({
+    "todos":todos
+  });
 });
-app.post('/todos',(req,res)=>{
+app.post('/tasks',(req,res)=>{
   const todo={
     id :Math.floor(Math.random()*1000000),
     title:req.body.title,
     description:req.body.description
 
   };
+  try{
   todos.push(todo);
   console.log(todos);
   res.status(201).json(todo);
+  }
+  catch(error){
+    return res.status(500).json({
+        "msg":"something went wrong",
+        "error":error
+    })
+  }
 });  
-app.get('/todos/:id',(req,res)=>{
+app.get('/tasks/:id',(req,res)=>{
   const index=findIndex(todos,parseInt(req.params.id));
+  try{
   if(index===-1){
     res.status(404).send();
   }
   else{
-    res.json(todos[index]);
+    return res.status(200).json({
+        "todos" :todos[index]
+  });
+
   }
+}
+catch(error){
+    return res.status(400).json({
+        "msg": "something went wrong",
+        "error": error
+    })
+}
 });
-app.delete('/todos/:id',(req,res)=>{
+app.delete('/tasks/:id',(req,res)=>{
   const index= findIndex(todos,parseInt(req.params.id));
+  try{
   if(index===-1){
-      res.status(404).send();
+    return  res.status(404).json({
+        "msg":"id not found"
+      });
   }
   else{
     todos=removeAtIndex(todos,index);
-    res.status(201).send();
+   return  res.status(201).json({
+        "msg":"deleted successfully",
+    });
   }
+} catch(error){
+    return res.status(500).json({
+        "msg":"something went wrong",
+        "error":error
+    })
+}
 });
-app.put('/todos/:id',(req,res)=>{
+app.put('/tasks/:id',(req,res)=>{
   const index = findIndex(todos,parseInt(req.params.id));
+  try{
   if(index===-1){
     res.status(401).send();
   }
@@ -66,6 +99,13 @@ app.put('/todos/:id',(req,res)=>{
     todos[index].description=req.body.description;
     res.json(todos[index]);
   }
+}
+catch(error){
+    return res.status(500).json({
+        "error":"something went wrong",
+        "error":error
+    })
+}
 });
 module.exports = app;
 app.listen(8080);
