@@ -12,10 +12,12 @@ To get started with the project, follow these steps:
 
 3. Install dependencies `npm i`:
 
-4. Start the server:
+4.Run `npm i cors` and `npm i express`; 
+
+5. Start the server:
 
 ## Documentation 
-
+Refer to the report added above for documentation and guide.
 
 
 The server will start running on `http://localhost:8080` by default.
